@@ -15,8 +15,10 @@ function App() {
   }, []);
 
   const fetchPersonas = async () => {
+    console.log("About to fetch personas");
     try {
       const response = await axios.get(`${API_BASE_URL}/personas`);
+      console.log("persona response.data", response.data);
       setPersonas(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Error fetching personas:', error);
@@ -25,6 +27,9 @@ function App() {
   };
 
   const handleSendMessage = async () => {
+    console.log("About to send message");
+    console.log("selectedPersona", selectedPersona);
+    console.log("message", message);
     if (!selectedPersona || !message.trim()) return;
 
     setIsLoading(true);
@@ -33,6 +38,7 @@ function App() {
         persona_id: parseInt(selectedPersona),
         message: message
       });
+      console.log("send messageresponse.data", response.data);
       setChat(prev => [...prev, { role: 'user', content: message }, { role: 'ai', content: response.data.Response }]);
       setMessage('');
     } catch (error) {
