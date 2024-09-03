@@ -61,7 +61,7 @@ function App() {
         <div>
           <h1 className="text-3xl font-bold text-center mb-8">Chat with AI Personas</h1>
           <p>Selected Persona: {selectedPersona}</p>
-          <p>Name: {personas.find(persona => persona.ID === selectedPersona)?.Name}</p>
+          <p>Name: {personas.find(persona => persona.ID === selectedPersona)?.name}</p>
           <select
             value={selectedPersona}
             onChange={(e) => setSelectedPersona(e.target.value)}
@@ -70,7 +70,7 @@ function App() {
             <option value="">Choose a persona</option>
             {Array.isArray(personas) && personas.length > 0 ? (
               personas.map(persona => (
-                <option key={persona.ID} value={persona.ID}>{persona.Name}</option>
+                <option key={persona.ID} value={persona.ID}>{persona.name}</option>
               ))
             ) : (
               <option value="">No personas found</option>
