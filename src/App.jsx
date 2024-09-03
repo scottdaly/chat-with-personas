@@ -19,9 +19,10 @@ function App() {
     try {
       const response = await axios.get(`${API_BASE_URL}/personas`);
       console.log("persona response.data", response.data);
+      console.log("Is it an array?", Array.isArray(response.data));
       setPersonas(Array.isArray(response.data) ? response.data : []);
       console.log("persona setPersonas", personas);
-      map.personas(persona => {
+      personas.map(persona => {
         console.log("Persona", persona);
       })
     } catch (error) {
