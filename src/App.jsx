@@ -17,9 +17,10 @@ function App() {
   const fetchPersonas = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/personas`);
-      setPersonas(response.data);
+      setPersonas(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Error fetching personas:', error);
+      setPersonas([]);
     }
   };
 
@@ -53,10 +54,14 @@ function App() {
             onChange={(e) => setSelectedPersona(e.target.value)}
             className="w-full p-2 mb-4 border border-gray-300 rounded"
           >
-            <option value="">Choose a persona</option>\
-            {personas ? personas.length > 0 ? personas.map(persona => (
-              <option key={persona.ID} value={persona.ID}>{persona.Name}</option>
-            )) : <option value="">No personas found</option> : <option value="">No personas found</option>}
+            <option value="">Choose a persona</option>
+            {Array.isArray(personas) && personas.length > 0 ? (
+              personas.map(persona => (
+                <option key={persona.ID} value={persona.ID}>{persona.Name}</option>
+              ))
+            ) : (
+              <option value="">No personas found</option>
+            )}
           </select>
           <div className="flex mb-4">
             <input
@@ -77,11 +82,15 @@ function App() {
           </div>
           <div className="border border-gray-300 rounded h-96 overflow-y-auto p-4">
             
-            {chat ? chat.length > 0 ? chat.map((msg, index) => (
-              <div key={index} className={`mb-4 p-2 rounded ${msg.role === 'user' ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                <strong className="font-bold">{msg.role === 'user' ? 'You' : 'AI'}:</strong> {msg.content}
-              </div>
-            )) : <div>No chat history</div> : <div>No chat history</div>}
+            {Array.isArray(chat) && chat.length > 0 ? (
+              chat.map((msg, index) => (
+                <div key={index} className={`mb-4 p-2 rounded ${msg.role === 'user' ? 'bg-blue-100' : 'bg-gray-100'}`}>
+                  <strong className="font-bold">{msg.role === 'user' ? 'You' : 'AI'}:</strong> {msg.content}
+                </div>
+              ))
+            ) : (
+              <div>No chat history</div>
+            )}
           </div>
         </div>
       )}
