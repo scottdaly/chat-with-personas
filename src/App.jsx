@@ -9,7 +9,8 @@ function App() {
   const [message, setMessage] = useState('');
   const [chat, setChat] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [conversationId, setConversationId] = useState(null);
+  
   useEffect(() => {
     fetchPersonas();
   }, []);
@@ -32,20 +33,18 @@ function App() {
   };
 
   const handleSendMessage = async () => {
-    console.log("About to send message");
-    console.log("selectedPersona", selectedPersona);
-    console.log("message", message);
     if (!selectedPersona || !message.trim()) return;
 
     setIsLoading(true);
     try {
       const response = await axios.post(`${API_BASE_URL}/chat`, {
+        conversation_id: conversationId, // This would be null for a new conversation
         persona_id: parseInt(selectedPersona),
         message: message
       });
-      console.log("send message response.data", response.data);
       setChat(prev => [...prev, { role: 'user', content: message }, { role: 'ai', content: response.data.response }]);
       setMessage('');
+      setConversationId(response.data.conversation_id); // Store the conversation ID for subsequent messages
     } catch (error) {
       console.error('Error sending message:', error);
     } finally {
@@ -60,8 +59,6 @@ function App() {
       ) : (
         <div>
           <h1 className="text-3xl font-bold text-center mb-8">Chat with AI Personas</h1>
-          <p>Selected Persona: {selectedPersona}</p>
-          <p>Name: {personas.find(persona => persona.ID === selectedPersona)?.name}</p>
           <select
             value={selectedPersona}
             onChange={(e) => setSelectedPersona(e.target.value)}
