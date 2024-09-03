@@ -14,6 +14,10 @@ function App() {
     fetchPersonas();
   }, []);
 
+  useEffect(() => {
+    console.log("personas", personas);
+  }, [personas]);
+
   const fetchPersonas = async () => {
     console.log("About to fetch personas");
     try {
@@ -21,10 +25,6 @@ function App() {
       console.log("persona response.data", response.data);
       console.log("Is it an array?", Array.isArray(response.data));
       setPersonas(Array.isArray(response.data) ? response.data : []);
-      console.log("persona setPersonas", personas);
-      personas.map(persona => {
-        console.log("Persona", persona);
-      })
     } catch (error) {
       console.error('Error fetching personas:', error);
       setPersonas([]);
