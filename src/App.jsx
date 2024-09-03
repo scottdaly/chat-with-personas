@@ -42,8 +42,8 @@ function App() {
         persona_id: parseInt(selectedPersona),
         message: message
       });
-      console.log("send messageresponse.data", response.data);
-      setChat(prev => [...prev, { role: 'user', content: message }, { role: 'ai', content: response.data.Response }]);
+      console.log("send message response.data", response.data);
+      setChat(prev => [...prev, { role: 'user', content: message }, { role: 'ai', content: response.data.response }]);
       setMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
