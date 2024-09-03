@@ -20,6 +20,10 @@ function App() {
       const response = await axios.get(`${API_BASE_URL}/personas`);
       console.log("persona response.data", response.data);
       setPersonas(Array.isArray(response.data) ? response.data : []);
+      console.log("persona setPersonas", personas);
+      map.personas(persona => {
+        console.log("Persona", persona);
+      })
     } catch (error) {
       console.error('Error fetching personas:', error);
       setPersonas([]);
@@ -55,6 +59,7 @@ function App() {
       ) : (
         <div>
           <h1 className="text-3xl font-bold text-center mb-8">Chat with AI Personas</h1>
+          <p>Selected Persona: {selectedPersona}</p>
           <select
             value={selectedPersona}
             onChange={(e) => setSelectedPersona(e.target.value)}
