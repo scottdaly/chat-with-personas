@@ -61,6 +61,7 @@ function App() {
         <div>
           <h1 className="text-3xl font-bold text-center mb-8">Chat with AI Personas</h1>
           <p>Selected Persona: {selectedPersona}</p>
+          <p>Name: {personas.find(persona => persona.ID === selectedPersona)?.Name}</p>
           <select
             value={selectedPersona}
             onChange={(e) => setSelectedPersona(e.target.value)}
