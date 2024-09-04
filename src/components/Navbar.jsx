@@ -1,6 +1,18 @@
 import React from 'react';
+import { useAuth } from '../AuthContext';
 
-function Navbar({ isLoggedIn, user, onLogin, onLogout }) {
+
+
+function Navbar({ }) {
+    const { isLoggedIn, user, handleLogin, handleLogout } = useAuth();
+
+    const onLogin = () => {
+        handleLogin();
+    }
+    
+    const onLogout = () => {
+        handleLogout();
+    }
   return (
     <nav className="bg-blue-600 p-4">
       <div className="container mx-auto flex justify-between items-center">

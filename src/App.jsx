@@ -11,17 +11,14 @@ import ChatDashboard from "./ChatDashboard";
 import Navbar from "./components/Navbar";
 
 function App() {
-  const { isLoggedIn, user, handleLogin, handleLogout } = useAuth();
+ 
 
   return (
     <AuthProvider>
       <Router>
         <div className="flex flex-col min-h-screen">
           <Navbar 
-            isLoggedIn={isLoggedIn} 
-            user={user} 
-            onLogin={handleLogin} 
-            onLogout={handleLogout} 
+
           />
           <div className="container mx-auto px-4 py-8 max-w-2xl flex-grow">
             <h1 className="text-3xl font-bold text-center mb-8">
