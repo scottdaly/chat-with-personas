@@ -10,14 +10,41 @@ function App() {
   const [chat, setChat] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
   
   useEffect(() => {
-    fetchPersonas();
-  }, []);
+    checkLoginStatus();
+    if (isLoggedIn) {
+      fetchPersonas();
+    }
+  }, [isLoggedIn]);
 
-  useEffect(() => {
-    console.log("personas", personas);
-  }, [personas]);
+  const checkLoginStatus = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/auth/status`, { withCredentials: true });
+      setIsLoggedIn(response.data.isLoggedIn);
+      setUser(response.data.user);
+    } catch (error) {
+      console.error('Error checking login status:', error);
+      setIsLoggedIn(false);
+      setUser(null);
+    }
+  };
+
+  const handleLogin = () => {
+    window.location.href = `${API_BASE_URL}/login`;
+  };
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(`${API_BASE_URL}/logout`, {}, { withCredentials: true });
+      setIsLoggedIn(false);
+      setUser(null);
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
 
   const fetchPersonas = async () => {
     console.log("About to fetch personas");
@@ -54,54 +81,78 @@ function App() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl">
-      {isLoading ? (
-        <div>Loading...</div>
+      <h1 className="text-3xl font-bold text-center mb-8">Chat with AI Personas</h1>
+      
+      {!isLoggedIn ? (
+        <div className="text-center">
+          <p className="mb-4">Please log in to start chatting.</p>
+          <button 
+            onClick={handleLogin}
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Login with Google
+          </button>
+        </div>
       ) : (
         <div>
-          <h1 className="text-3xl font-bold text-center mb-8">Chat with AI Personas</h1>
-          <select
-            value={selectedPersona}
-            onChange={(e) => setSelectedPersona(e.target.value)}
-            className="w-full p-2 mb-4 border border-gray-300 rounded"
-          >
-            <option value="">Choose a persona</option>
-            {Array.isArray(personas) && personas.length > 0 ? (
-              personas.map(persona => (
-                <option key={persona.ID} value={persona.ID}>{persona.name}</option>
-              ))
-            ) : (
-              <option value="">No personas found</option>
-            )}
-          </select>
-          <div className="flex mb-4">
-            <input
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-              placeholder="Type your message..."
-              className="flex-grow p-2 border border-gray-300 rounded-l"
-            />
+          <div className="mb-4 flex justify-between items-center">
+            <p>Welcome, {user?.email}</p>
             <button 
-              onClick={handleSendMessage} 
-              disabled={isLoading} 
-              className="bg-blue-500 text-white px-4 py-2 rounded-r disabled:bg-blue-300"
+              onClick={handleLogout}
+              className="bg-red-500 text-white px-4 py-2 rounded"
             >
-              {isLoading ? 'Sending...' : 'Send'}
+              Logout
             </button>
           </div>
-          <div className="border border-gray-300 rounded h-96 overflow-y-auto p-4">
-            
-            {Array.isArray(chat) && chat.length > 0 ? (
-              chat.map((msg, index) => (
-                <div key={index} className={`mb-4 p-2 rounded ${msg.role === 'user' ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                  <strong className="font-bold">{msg.role === 'user' ? 'You' : 'AI'}:</strong> {msg.content}
-                </div>
-              ))
-            ) : (
-              <div>No chat history</div>
-            )}
-          </div>
+          
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : (
+            <div>
+              <select
+                value={selectedPersona}
+                onChange={(e) => setSelectedPersona(e.target.value)}
+                className="w-full p-2 mb-4 border border-gray-300 rounded"
+              >
+                <option value="">Choose a persona</option>
+                {Array.isArray(personas) && personas.length > 0 ? (
+                  personas.map(persona => (
+                    <option key={persona.ID} value={persona.ID}>{persona.name}</option>
+                  ))
+                ) : (
+                  <option value="">No personas found</option>
+                )}
+              </select>
+              <div className="flex mb-4">
+                <input
+                  type="text"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                  placeholder="Type your message..."
+                  className="flex-grow p-2 border border-gray-300 rounded-l"
+                />
+                <button 
+                  onClick={handleSendMessage} 
+                  disabled={isLoading} 
+                  className="bg-blue-500 text-white px-4 py-2 rounded-r disabled:bg-blue-300"
+                >
+                  {isLoading ? 'Sending...' : 'Send'}
+                </button>
+              </div>
+              <div className="border border-gray-300 rounded h-96 overflow-y-auto p-4">
+                {Array.isArray(chat) && chat.length > 0 ? (
+                  chat.map((msg, index) => (
+                    <div key={index} className={`mb-4 p-2 rounded ${msg.role === 'user' ? 'bg-blue-100' : 'bg-gray-100'}`}>
+                      <strong className="font-bold">{msg.role === 'user' ? 'You' : 'AI'}:</strong> {msg.content}
+                    </div>
+                  ))
+                ) : (
+                  <div>No chat history</div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
