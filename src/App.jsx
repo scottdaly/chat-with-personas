@@ -10,25 +10,46 @@ import { AuthProvider, useAuth } from "./AuthContext";
 import ChatDashboard from "./ChatDashboard";
 import Navbar from "./components/Navbar";
 
-function App() {;
-
+function App() {
   return (
     <AuthProvider>
       <Router>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route
-                path="/chat"
-                element={
-                  <ProtectedRoute>
-                    <ChatDashboard />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-        
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/chat"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <ChatDashboard />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chat/:personaId"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <ChatDashboard />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
       </Router>
     </AuthProvider>
+  );
+}
+
+function Layout({ children }) {
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      <div className="container mx-auto px-4 py-8 max-w-4xl flex-grow">
+        {children}
+      </div>
+    </div>
   );
 }
 
