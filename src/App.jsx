@@ -10,20 +10,11 @@ import { AuthProvider, useAuth } from "./AuthContext";
 import ChatDashboard from "./ChatDashboard";
 import Navbar from "./components/Navbar";
 
-function App() {
- 
+function App() {;
 
   return (
     <AuthProvider>
       <Router>
-        <div className="flex flex-col min-h-screen">
-          <Navbar 
-
-          />
-          <div className="container mx-auto px-4 py-8 max-w-2xl flex-grow">
-            <h1 className="text-3xl font-bold text-center mb-8">
-              Chat with AI Personas
-            </h1>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route
@@ -35,8 +26,7 @@ function App() {
                 }
               />
             </Routes>
-          </div>
-        </div>
+        
       </Router>
     </AuthProvider>
   );
@@ -50,7 +40,15 @@ function Home() {
   }
 
   return (
+    <div className="flex flex-col min-h-screen">
+    <Navbar 
+    />
+    <div className="container mx-auto px-4 py-8 max-w-2xl flex-grow">
+
     <div className="text-center">
+                  <h1 className="text-3xl font-bold text-center mb-8">
+              Chat with AI Personas
+            </h1>
       <h2 className="text-2xl font-semibold mb-4">Welcome to AI Personas Chat</h2>
       <p className="mb-6">Engage in meaningful conversations with various AI personas tailored for different topics and expertise.</p>
       
@@ -87,6 +85,8 @@ function Home() {
       <div className="mt-8 text-sm text-gray-600">
         <p>By logging in, you agree to our <Link to="/terms" className="text-blue-500 hover:underline">Terms of Service</Link> and <Link to="/privacy" className="text-blue-500 hover:underline">Privacy Policy</Link>.</p>
       </div>
+    </div>
+    </div>
     </div>
   );
 }
