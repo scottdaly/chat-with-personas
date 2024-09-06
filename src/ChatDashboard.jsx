@@ -67,7 +67,7 @@ function ChatDashboard() {
       {isLoading && !personaId ? (
         <div>Loading...</div>
       ) : (
-        <div>
+        <div className="flex flex-col h-full">
           {!personaId ? (
             <div className="grid grid-cols-3 gap-4 mb-4">
               {personas.map((persona) => (
@@ -103,7 +103,7 @@ function ChatDashboard() {
                     </div>
                   ))
                 ) : (
-                  <div>No chat history</div>
+                  <div className="text-center text-gray-500 flex items-center justify-center h-full">Send a message to get started</div>
                 )}
               </div>
               <div className="flex mb-4">
