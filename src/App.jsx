@@ -9,7 +9,9 @@ import {
 import { AuthProvider, useAuth } from "./AuthContext";
 import ChatDashboard from "./ChatDashboard";
 import Navbar from "./components/Navbar";
-
+import DashboardLayout from "./components/DashboardLayout";
+import TestChatDashboard from "./TestChatDashboard";
+import DashboardNav from "./components/DashboardNav";
 function App() {
   return (
     <AuthProvider>
@@ -20,9 +22,9 @@ function App() {
             path="/chat"
             element={
               <ProtectedRoute>
-                <Layout>
+                <DashboardLayout>
                   <ChatDashboard />
-                </Layout>
+                </DashboardLayout>
               </ProtectedRoute>
             }
           />
@@ -30,26 +32,23 @@ function App() {
             path="/chat/:personaId"
             element={
               <ProtectedRoute>
-                <Layout>
+                <DashboardLayout>
                   <ChatDashboard />
-                </Layout>
+                </DashboardLayout>
               </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/testchat/:personaId"
+            element={
+                <DashboardLayout>
+                  <TestChatDashboard />
+                </DashboardLayout>
             }
           />
         </Routes>
       </Router>
     </AuthProvider>
-  );
-}
-
-function Layout({ children }) {
-  return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
-      <div className="container mx-auto px-4 py-8 max-w-4xl flex-grow">
-        {children}
-      </div>
-    </div>
   );
 }
 

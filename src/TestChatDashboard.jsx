@@ -1,28 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useAuth } from "./AuthContext";
-import { useParams, Link } from "react-router-dom";
 
 const API_BASE_URL = "https://venturementor.co/api";
 
-function ChatDashboard() {
-  const { user } = useAuth();
-  const { personaId } = useParams();
+function TestChatDashboard() {
+
+  const personaId = 1;
   const [personas, setPersonas] = useState([]);
   const [message, setMessage] = useState("");
-  const [chat, setChat] = useState([]);
+  const [chat, setChat] = useState([{role: "ai", content: "Hello, I am ChatGPT, an AI Created by OpenAI. I have knowledge of the latest AI technologies and can help you with your startup. How can I help you today?"}, {role: "user", content: "I need help with my startup, which is called Venturementor.co. I need help with my website and marketing. I also need help with my pitch deck. I also need help with my business plan. How can I help you today?"}, {role: "ai", content: "What is your name?"}, {role: "user", content: "My name is John Doe"}, {role: "ai", content: "What is your email?"}, {role: "user", content: "My email is john.doe@example.com"}]);
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState(null);
 
-  useEffect(() => {
-    fetchPersonas();
-  }, []);
 
-  useEffect(() => {
-    // Reset chat when personaId changes
-    setChat([]);
-    setConversationId(null);
-  }, [personaId]);
+  
 
   const fetchPersonas = async () => {
     console.log("About to fetch personas");
@@ -67,22 +58,14 @@ function ChatDashboard() {
       {isLoading && !personaId ? (
         <div>Loading...</div>
       ) : (
-        <div>
+        <div className="flex flex-col h-full">
           {!personaId ? (
             <div className="grid grid-cols-3 gap-4 mb-4">
-              {personas.map((persona) => (
-                <Link
-                  key={persona.ID}
-                  to={`/chat/${persona.ID}`}
-                  className="bg-blue-100 p-4 rounded hover:bg-blue-200 transition duration-300"
-                >
-                  {persona.name}
-                </Link>
-              ))}
+             
             </div>
           ) : (
             <div className="flex flex-col flex-1 h-full pt-8">
-<div className="rounded flex flex-col flex-1 overflow-y-auto p-4">
+              <div className="rounded flex flex-col flex-1 overflow-y-auto p-4">
                 {chat.length > 0 ? (
                   chat.map((msg, index) => (
                     <div className="flex flex-row gap-4 my-4">
@@ -131,4 +114,4 @@ function ChatDashboard() {
   );
 }
 
-export default ChatDashboard;
+export default TestChatDashboard;
